@@ -1,0 +1,17 @@
+description: STM32 DFSDM Controller
+
+compatible: "st,stm32-dfsdm"
+
+# Include base schemas to inherit standard property definitions (reg, interrupts, etc.)
+include: [base.yaml, pinctrl-device.yaml]
+
+properties:
+  "#address-cells":
+    type: int
+    required: true
+    const: 1
+
+  "#size-cells":
+    type: int
+    required: true
+    const: 1

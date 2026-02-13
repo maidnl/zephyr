@@ -46,6 +46,23 @@
 		led1 = &green_led;
 		sw0 = &user_button;
 	};
+	soc {
+		dfsdm1: dfsdm@40017000 {
+		    compatible = "st,stm32-dfsdm";
+		    reg = <0x40017000 0x400>; /* 1KB register space */
+
+		    /* bit 28 enable DFSDM */
+		    clocks = <&rcc STM32_CLOCK_BUS_APB2 0x10000000>;
+
+		    interrupts = <110 0>, <111 0>, <112 0>, <113 0>;
+		    interrupt-names = "flt0", "flt1", "flt2", "flt3";
+
+		    #address-cells = <1>;
+		    #size-cells = <1>;
+
+		    status = "disabled";
+		};
+	};
 };
 
 &clk_hse {
@@ -266,6 +283,51 @@
 			st,sdram-timing = <2 6 4 6 2 2 2>;
 		};
 	};
+};
+
+&pinctrl {
+    dfsdm1_clk_pd3: dfsdm1_clk_pd3 {
+        pinmux = <STM32_PINMUX('D', 3, AF3)>; /* DFSDM1_CKOUT */
+        bias-disable;
+        slew-rate = "very-high-speed";
+    };
+
+    dfsdm1_dat_pc1: dfsdm1_dat_pc1 {
+        pinmux = <STM32_PINMUX('C', 1, AF3)>; /* DFSDM1_DATIN0 */
+        bias-disable;
+    };
+};
+
+&dfsdm1 {
+    status = "disabled";
+    pinctrl-0 = <&dfsdm1_clk_pd3 &dfsdm1_dat_pc1>;
+    pinctrl-names = "default";
+
+    dfsdm1_flt0: filter@0 {
+        compatible = "st,stm32-dfsdm-filter";
+        reg = <0x0 0x100>; /* Offset 0 for FLT0 */
+
+        interrupts = <110 0>;
+
+        /* DMA Config for H7 (DMAMUX)  Request 101 = DFSDM1_FLT0 */
+        dmas = <&dmamux1 2 101 0x400>;
+        dma-names = "rx";
+
+        status = "disabled";
+        label = "PDM_MIC_0";
+    };
+};
+
+&dmamux1 {
+	    status = "okay";
+};
+
+&dma1 {
+	    status = "okay";
+};
+
+&dma2 {
+	    status = "okay";
 };
 
 zephyr_udc0: &usbotg_fs {

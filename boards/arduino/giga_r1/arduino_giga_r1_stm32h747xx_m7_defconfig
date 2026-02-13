@@ -22,3 +22,14 @@ CONFIG_UART_CONSOLE=y
 
 # Use zephyr,code-partition as flash offset
 CONFIG_USE_DT_CODE_PARTITION=y
+
+# Enable DFSDM
+CONFIG_DFSDM_STM32=y
+CONFIG_DFSDM=y
+
+# Enable DMA
+CONFIG_DMA=y
+
+# DISABLE BANNER -> related to DFSDM (it outputs on serial and
+# make noise when you try to use the microphone)
+CONFIG_BOOT_BANNER=n

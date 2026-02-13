@@ -1,0 +1,85 @@
+#include <zephyr/dt-bindings/clock/stm32_clock.h>
+#include <zephyr/dt-bindings/pinctrl/stm32-pinctrl.h>
+
+/* * PART 1: Define the Missing Hardware Node
+ * We use the path "/ { soc { ... } }" instead of "&soc" to be safe.
+ */
+/ {
+    soc {
+        dfsdm1: dfsdm@40017000 {
+            compatible = "st,stm32-dfsdm";
+            reg = <0x40017000 0x400>; /* 1KB register space */
+
+            /* Bus: APB2, Bit: 0x40 (Bit 6 = DFSDM1EN) */
+            clocks = <&rcc STM32_CLOCK_BUS_APB2 0x00000040>;
+
+            interrupts = <110 0>, <111 0>, <112 0>, <113 0>;
+            interrupt-names = "flt0", "flt1", "flt2", "flt3";
+
+            #address-cells = <1>;
+            #size-cells = <1>;
+
+            status = "disabled";
+        };
+    };
+};
+
+/* * PART 2: Configure Pins
+ */
+&pinctrl {
+    /* * NOTE: These are Example Pins (PE9/PE7).
+     * On Arduino Portenta H7:
+     * - You usually access pins via the high-density headers.
+     * - Ensure these pins are not used by other onboard features (WiFi/Video).
+     * - If you use different pins, change the 'pinmux' values below.
+     */
+    dfsdm1_clk_pe9: dfsdm1_clk_pe9 {
+        pinmux = <STM32_PINMUX('E', 9, AF10)>; /* DFSDM1_CKOUT */
+        bias-disable;
+        slew-rate = "very-high-speed";
+    };
+
+    dfsdm1_dat_pe7: dfsdm1_dat_pe7 {
+        pinmux = <STM32_PINMUX('E', 7, AF10)>; /* DFSDM1_DATIN2 */
+        bias-disable;
+    };
+};
+
+/* * PART 3: Enable and Configure the Peripheral
+ */
+&dfsdm1 {
+    status = "okay";
+    pinctrl-0 = <&dfsdm1_clk_pe9 &dfsdm1_dat_pe7>;
+    pinctrl-names = "default";
+
+    /* Define the specific filter we want to use */
+    dfsdm1_flt0: filter@0 {
+        compatible = "st,stm32-dfsdm-filter";
+        reg = <0x0 0x100>; /* Offset 0 for FLT0 */
+
+        interrupts = <110 0>;
+
+        /* DMA Config for H7 (DMAMUX)
+         * Request 101 = DFSDM1_FLT0
+         */
+        dmas = <&dmamux1 0 101 0x400>;
+        dma-names = "rx";
+
+        status = "okay";
+        label = "PDM_MIC_0";
+    };
+};
+
+/* Enable the DMA Multiplexer */
+&dmamux1 {
+	    status = "okay";
+};
+
+/* Enable the underlying DMA controllers (if not already enabled by board) */
+&dma1 {
+	    status = "okay";
+};
+
+&dma2 {
+	    status = "okay";
+};

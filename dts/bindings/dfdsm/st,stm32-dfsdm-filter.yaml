@@ -1,0 +1,17 @@
+description: STM32 DFSDM Filter
+
+compatible: "st,stm32-dfsdm-filter"
+
+include: [base.yaml]
+
+properties:
+  dmas:
+    type: phandle-array
+    description: DMA channel specifier
+
+  dma-names:
+    type: string-array
+    description: DMA request name
+
+  label:
+    type: string

@@ -1,0 +1,30 @@
+# drivers/dfsdm/Kconfig
+
+menuconfig DFSDM
+    bool "Digital Filter for Sigma Delta Modulators (DFSDM) Drivers"
+    help
+      Enable support for DFSDM drivers.
+
+if DFSDM
+
+config DFSDM_STM32
+    bool "STM32 DFSDM driver"
+    default y
+    depends on DT_HAS_ST_STM32_DFSDM_FILTER_ENABLED
+    select DMA
+    help
+      Enable STM32 DFSDM driver.
+
+config DFSDM_INIT_PRIORITY
+     int "DFSDM init priority"
+     default 60
+     help
+          Device driver initialization priority.
+          Must be lower than application priority but higher than
+          kernel services.
+
+module = DFSDM
+module-str = dfsdm
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # DFSDM
