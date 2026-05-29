@@ -27,6 +27,14 @@ control these allocations.
 
         Size of the LLEXT heap in data memory in kilobytes.
 
+.. note::
+   The LLEXT instruction heap is grouped with Zephyr .rodata, which the linker
+   typically places after .text in instruction memory.
+
+.. warning::
+   LLEXT will be unable to link and execute extensions if instruction memory
+   (i.e., memory the processor can fetch instructions from) is not writable.
+
 Alternatively the application can configure a dynamic heap using the following
 option.
 
@@ -50,7 +58,6 @@ option.
    alignment required by the architecture.
 
 .. note::
-
    On Harvard architectures, applications must call
    :c:func:`llext_heap_init_harvard`.
 
