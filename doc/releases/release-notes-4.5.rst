@@ -63,6 +63,10 @@ New APIs and options
 
 .. zephyr-keep-sorted-start re(^\* \w)
 
+* Network
+
+  * Add :c:func:`net_eth_set_if_type_wifi` to set the ethernet interface type to Wi-Fi.
+
 .. zephyr-keep-sorted-stop
 
 New Boards
