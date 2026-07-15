@@ -1,0 +1,6 @@
+board:
+  name: arduino_mezza_in
+  full_name: Arduino MezzaIn
+  vendor: arduino
+  socs:
+    - name: stm32c552xx
