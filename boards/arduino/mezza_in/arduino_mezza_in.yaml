@@ -1,0 +1,18 @@
+identifier: arduino_mezza_in_main
+name: Arduino MezzaIn
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+ram: 1536
+flash: 4096
+supported:
+  - gpio
+  - gpio
+  - uart
+  - adc
+  - spi
+  - usb_device
+  - i2c
+  - i3c
+vendor: arduino

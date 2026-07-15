@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) 2026 Arduino SA
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+#include "arduino_mezza_in-common.dtsi"
+
+/ {
+	model = "Arduino Mezza";
+	compatible = "arduino,mezza";
+
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	chosen {
+		zephyr,console = &uart5;
+		zephyr,shell-uart = &uart5;
+		zephyr,sram = &sram1;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &slot0_partition;
+	};
+
+	aliases {
+		led0 = &blue_led_0;
+		/*led1 = &blue_led_0;
+		watchdog0 = &iwdg;
+		volt-sensor0 = &vref;
+		volt-sensor1 = &vbat;
+		button = &button0;
+		fade-led = &pwm_led_0;*/
+	};
+
+	zephyr,user {
+		iomcu-reset-gpios = <&gpioa 8 GPIO_ACTIVE_LOW>;
+		iomcu-boot-gpios = <&gpioc 15 GPIO_ACTIVE_HIGH>;
+		detect-out-gpios = <&gpioa 9 GPIO_ACTIVE_HIGH>;
+		detect-in-gpios = <&gpioa 10 GPIO_ACTIVE_HIGH>;
+		led-row1-gpios = <&gpiob 7 GPIO_ACTIVE_HIGH>;
+		led-row2-gpios = <&gpioc 13 GPIO_ACTIVE_HIGH>;
+		led-row3-gpios = <&gpioa 15 GPIO_ACTIVE_HIGH>;
+		led-row3-gpios = <&gpioc 14 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&zephyr_udc0 {
+	board_cdc_acm_uart: board_cdc_acm_uart {
+		compatible = "zephyr,cdc-acm-uart";
+		status = "okay";
+	};
+};

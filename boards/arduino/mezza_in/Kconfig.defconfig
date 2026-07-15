@@ -1,0 +1,13 @@
+# Arduino Mezza board configuration
+
+# Copyright (c) 2026 Arduino SRL
+# SPDX-License-Identifier: Apache-2.0
+
+if BOARD_ARDUINO_MEZZA_IN
+
+endif # BOARD_ARDUINO_MEZZA_IN
+
+if BOARD_ARDUINO_MEZZA_IN_SUB
+
+endif # BOARD_ARDUINO_MEZZA_IN_SUB
+
