@@ -4,3 +4,8 @@ board:
   vendor: arduino
   socs:
     - name: stm32c552xx
+  variants:
+    - name: main
+      qualifier: main
+    - name: iomcu
+      qualifier: iomcu
