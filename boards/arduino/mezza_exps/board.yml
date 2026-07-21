@@ -1,0 +1,11 @@
+board:
+  name: arduino_mezza_exps
+  full_name: Arduino Expansions
+  vendor: arduino
+  socs:
+    - name: stm32c552xx
+  variants:
+    - name: inmainmcu
+      qualifier: inmainmcu
+    - name: iniomcu
+      qualifier: iniomcu
