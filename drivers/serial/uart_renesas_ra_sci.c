@@ -1036,9 +1036,9 @@ static void uart_ra_sci_eri_isr(const struct device *dev)
 
 	if (data->user_cb != NULL) {
 		data->user_cb(dev, data->user_cb_data);
-		return;
 	}
 	(void)uart_ra_sci_err_check(dev);
+	return;
 #endif
 
 #if defined(CONFIG_UART_ASYNC_API)
