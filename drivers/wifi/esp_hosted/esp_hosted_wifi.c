@@ -651,6 +651,8 @@ static int esp_hosted_dev_init(const struct device *dev)
 		data->fw_version.minor = fw->minor;
 		data->fw_version.rev_patch1 = fw->rev_patch1;
 		data->fw_version.rev_patch2 = fw->rev_patch2;
+		snprintk(data->fw_version.str, sizeof(data->fw_version.str), "%u.%u.%u.%u.%u",
+			 fw->major1, fw->major2, fw->minor, fw->rev_patch1, fw->rev_patch2);
 	}
 
 	snprintk(data->fw_version.str, sizeof(data->fw_version.str), "%u.%u.%u.%u.%u",
