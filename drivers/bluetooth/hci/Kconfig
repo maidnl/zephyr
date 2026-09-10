@@ -270,8 +270,8 @@ config BT_AIROC
 	default y
 	select GPIO                          if BT_H4
 	select UART_USE_RUNTIME_CONFIGURE    if BT_H4
-	select BT_HCI_SETUP
-	select BT_HCI_SET_PUBLIC_ADDR
+	select BT_HCI_SETUP                  if BT_HCI_HOST
+	select BT_HCI_SET_PUBLIC_ADDR        if BT_HCI_HOST
 	select USE_INFINEON_ABSTRACTION_RTOS if BT_CYW208XX
 	select EVENTS                        if BT_CYW208XX
 	depends on DT_HAS_INFINEON_BT_HCI_UART_ENABLED || DT_HAS_INFINEON_CYW208XX_HCI_ENABLED

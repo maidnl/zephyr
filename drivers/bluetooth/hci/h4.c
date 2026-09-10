@@ -580,7 +580,7 @@ static int h4_close(const struct device *dev)
 	return 0;
 }
 
-#if defined(CONFIG_BT_HCI_SETUP)
+#if defined(CONFIG_BT_HCI_SETUP) && defined(CONFIG_BT_HCI_HOST)
 static int h4_setup(const struct device *dev, const struct bt_hci_setup_params *params)
 {
 	const struct h4_config *cfg = dev->config;
@@ -590,6 +590,12 @@ static int h4_setup(const struct device *dev, const struct bt_hci_setup_params *
 	 * initialize BT Controller before BT Host executes Reset sequence.
 	 * bt_h4_vnd_setup function must be implemented in vendor-specific HCI
 	 * extension module if CONFIG_BT_HCI_SETUP is enabled.
+	 *
+	 * bt_h4_vnd_setup() implementations rely on host-only APIs (e.g.
+	 * bt_hci_cmd_send_sync()), which are only built when CONFIG_BT_HCI_HOST
+	 * is enabled. Never call it when Zephyr is used as a HCI transport
+	 * only (CONFIG_BT_HCI_RAW), or the link will fail with an undefined
+	 * reference to those host-only symbols.
 	 */
 	extern int bt_h4_vnd_setup(const struct device *dev,
 				   const struct bt_hci_setup_params *params);
@@ -602,7 +608,7 @@ static DEVICE_API(bt_hci, h4_driver_api) = {
 	.open = h4_open,
 	.send = h4_send,
 	.close = h4_close,
-#if defined(CONFIG_BT_HCI_SETUP)
+#if defined(CONFIG_BT_HCI_SETUP) && defined(CONFIG_BT_HCI_HOST)
 	.setup = h4_setup,
 #endif
 };
