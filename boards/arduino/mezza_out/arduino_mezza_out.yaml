@@ -1,0 +1,16 @@
+identifier: arduino_mezza_out
+name: Arduino MezzaOut
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+ram: 128
+flash: 512
+supported:
+  - gpio
+  - gpio
+  - uart
+  - adc
+  - i2c
+  - i3c
+vendor: arduino

@@ -1,0 +1,163 @@
+/*
+ * Copyright (c) 2026 Arduino SA
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#include <st/c5/stm32c562Xe.dtsi>
+#include <st/c5/stm32c5(5-6)2c(c-e)ux-pinctrl.dtsi>
+#include <zephyr/dt-bindings/sensor/qdec_stm32.h>
+#include <zephyr/dt-bindings/led/led.h>
+#include <zephyr/dt-bindings/clock/stm32c5_clock.h>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+
+/{
+	leds: leds {
+		compatible = "gpio-leds";
+
+		blue_led_0: led_1 {
+			gpios = <&gpiob 7 GPIO_ACTIVE_LOW>;
+			label = "BLUE0";
+		};
+	};
+};
+
+&flash0 {
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		boot_partition: partition@0 {
+			label = "mcuboot";
+			reg = <0x00000000 DT_SIZE_K(64)>;
+		};
+
+		slot0_partition: partition@10000 {
+			label = "image-0";
+			reg = <0x00010000 DT_SIZE_K(224)>;
+		};
+
+		slot1_partition: partition@100000 {
+			label = "image-1";
+			reg = <0x00208000 DT_SIZE_K(224)>;
+		};
+	};
+};
+
+/*
+ * USB Full Speed
+ */
+
+zephyr_udc0: &usb {
+	pinctrl-0 = <&usb_dm_pa11 &usb_dp_pa12>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+/*
+ * ------------------------------- CLOCKS
+ */
+
+&clk_hse {
+	clock-frequency = <DT_FREQ_M(48)>;
+	status = "okay";
+};
+
+&clk_psis {
+	clock-frequency = <DT_FREQ_M(144)>;
+	status = "okay";
+};
+
+&clk_hsis {
+	status = "okay";
+};
+
+&rcc {
+	st,psi-source = "HSE";
+	st,psi-frequency = <144>;
+	clock-frequency = <DT_FREQ_M(144)>;
+	ahb-prescaler = <1>;
+	apb1-prescaler = <1>;
+	apb2-prescaler = <1>;
+	apb3-prescaler = <1>;
+	status = "okay";
+};
+
+/*
+ * I2C
+ */
+
+/* espansion I2C */
+&i2c1 {
+	pinctrl-0 = <&i2c1_scl_pb8 &i2c1_sda_pb9>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+/* gpio expander */
+&i2c1 {
+	pinctrl-0 = <&i2c1_scl_pb3 &i2c1_sda_pb4>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+/*
+ * UART
+ */
+
+/* expansion uart */
+&uart5 {
+	pinctrl-0 = <&uart5_tx_pb6 &uart5_rx_pb5>;
+	pinctrl-names = "default";
+	current-speed = <115200>;
+	status = "okay";
+};
+
+
+&timers2{
+	st,prescaler = <254>;
+	status = "okay";
+
+	pwm2: pwm {
+		pinctrl-0 = <&tim2_ch1_pa0 &tim2_ch2_pa1 &tim2_ch3_pa2 &tim2_ch4_pa3>;
+		pinctrl-names = "default";
+		four-channel-capture-support;
+		status = "okay";
+	};
+};
+
+&timers5{
+	st,prescaler = <254>;
+	status = "okay";
+
+	pwm5: pwm {
+		pinctrl-0 = <&tim5_ch1_pa6 &tim5_ch2_pa7 &tim5_ch3_pb0 &tim5_ch4_pb1>;
+		pinctrl-names = "default";
+		four-channel-capture-support;
+		status = "okay";
+	};
+};
+
+&timers1{
+	st,prescaler = <254>;
+	status = "okay";
+
+	pwm1: pwm {
+		pinctrl-0 = <&tim1_ch1_pa8 &tim1_ch2_pa9 &tim1_ch3_pa10>;
+		pinctrl-names = "default";
+		four-channel-capture-support;
+		status = "okay";
+	};
+};
+
+&timers16{
+	st,prescaler = <254>;
+	status = "okay";
+
+	pwm16: pwm {
+		pinctrl-0 = <&tim16_ch1_pb7>;
+		pinctrl-names = "default";
+		four-channel-capture-support;
+		status = "okay";
+	};
+};

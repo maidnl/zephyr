@@ -1,0 +1,2 @@
+if(CONFIG_BOARD_ARDUINO_MEZZA_OUT)
+endif()

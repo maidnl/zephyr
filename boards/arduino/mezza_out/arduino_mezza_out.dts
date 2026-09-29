@@ -1,0 +1,53 @@
+/*
+ * Copyright (c) 2026 Arduino SA
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+#include "arduino_mezza_out-common.dtsi"
+
+/ {
+	model = "Arduino Mezza Out";
+	compatible = "arduino,mezza_out";
+
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	chosen {
+		zephyr,console = &uart5;
+		zephyr,shell-uart = &uart5;
+		zephyr,sram = &sram1;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &slot0_partition;
+	};
+
+	aliases {
+		/*led1 = &blue_led_0;
+		watchdog0 = &iwdg;
+		volt-sensor0 = &vref;
+		volt-sensor1 = &vbat;
+		button = &button0;
+		fade-led = &pwm_led_0;*/
+	};
+
+	zephyr,user {
+		fb1-a1-en-gpios = <&gpioa 4 GPIO_ACTIVE_HIGH>;
+		fb1-b2-en-gpios = <&gpioa 5 GPIO_ACTIVE_HIGH>;
+		detect-out-gpios = <&gpiob 14 GPIO_ACTIVE_HIGH>;
+		detect-in-gpios = <&gpioa 15 GPIO_ACTIVE_LOW>;
+		fb1-a2-en-gpios = <&gpiob 2 GPIO_ACTIVE_HIGH>;
+		fb1-b1-en-gpios = <&gpib 10 GPIO_ACTIVE_HIGH>;
+		fb2-a1-en-gpios = <&gpiob 15 GPIO_ACTIVE_HIGH>;
+		fb2-a2-en-gpios = <&gpioc 13 GPIO_ACTIVE_HIGH>;
+		fb2-b1-en-gpios = <&gpioc 14 GPIO_ACTIVE_HIGH>;
+		fb2-b2-en-gpios = <&gpioc 15 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&zephyr_udc0 {
+	board_cdc_acm_uart: board_cdc_acm_uart {
+		compatible = "zephyr,cdc-acm-uart";
+		status = "okay";
+	};
+};
